@@ -36,6 +36,7 @@ NS_VERSIONS_LOC_DIR = "namespace_versions"
 NS_REGEX = re.compile('[a-zA-Z0-9_-]+$')
 CONTENT_ENCODING = "utf-8"
 ENCODING_ASCII = "ascii"
+MAX_LENGTH_KEY = "max_length_key"
 
 
 def init(host="localhost", port=6379, db_number=0, namespace="", ns_versions_loc=None):
