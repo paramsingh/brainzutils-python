@@ -161,6 +161,11 @@ def set_many(mapping, time=None, namespace=None, encode=True):
     Returns:
         True on success.
     """
+
+    # update max key length for this namespace
+    for key in mapping:
+        update_max_key_length(namespace, key)
+
     # TODO: Fix return value
     result = _r.mset(_prep_dict(mapping, namespace, encode))
     if time:
@@ -293,6 +298,21 @@ def _decode_val(value):
     if value is None:
         return value
     return msgpack.unpackb(value, encoding=CONTENT_ENCODING, ext_hook=_msgpack_ext_hook)
+
+
+@init_required
+def update_max_key_length(key, namespace=None):
+    current_max_key_length = get_max_key_length(namespace)
+    if current_max_key_length is not None or len(key) > current_max_key_length:
+        _r.set(_append_namespace_version(namespace, MAX_LENGTH_KEY), len(key))
+
+
+@init_required
+def get_max_key_length(namespace=None):
+    val = _r.get(_append_namespace_version(namespace, MAX_LENGTH_KEY))
+    if val:
+        return int(val.decode("utf-8"))
+    return None
 
 
 ############

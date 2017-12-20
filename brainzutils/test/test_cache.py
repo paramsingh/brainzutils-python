@@ -146,3 +146,15 @@ class CacheTestCase(unittest.TestCase):
         cache.set("a", "not a number")
         with self.assertRaises(redis.exceptions.ResponseError):
             cache.increment("a")
+
+    def test_max_key_length(self):
+        self.assertIsNone(cache.get_max_key_length())
+        cache.set("1234", "val")
+        self.assertEqual(cache.get_max_key_length(), 4)
+        cache.set("12345", "val1")
+        self.assertEqual(cache.get_max_key_length(), 5)
+        cache.set("1234", "val2")
+        self.assertEqual(cache.get_max_key_length(), 5)
+        cache.set("123456", "val1", namespace="test_namespace")
+        self.assertEqual(cache.get_max_key_length(namespace="test_namespace"), 6)
+        self.assertEqual(cache.get_max_key_length(), 5)
