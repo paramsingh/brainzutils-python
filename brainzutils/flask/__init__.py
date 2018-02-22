@@ -34,7 +34,7 @@ class CustomFlask(Flask):
 
     def init_debug_toolbar(self):
         if self.debug:
-            DebugToolbarExtension(self):
+            DebugToolbarExtension(self)
 
 
     def init_loggers(self,
