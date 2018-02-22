@@ -8,7 +8,7 @@ class CustomFlask(Flask):
     """Custom version of Flask with our bells and whistles."""
 
     def __init__(self, import_name, config_file=None, debug=None,
-                 use_flask_uuid=False, use_debug_toolbar=False,
+                 use_flask_uuid=False,
                  *args, **kwargs):
         """Create an instance of Flask app.
 
@@ -30,8 +30,12 @@ class CustomFlask(Flask):
             self.debug = debug
         if use_flask_uuid:
             FlaskUUID(self)
-        if use_debug_toolbar and self.debug:
-            DebugToolbarExtension(self)
+
+
+    def init_debug_toolbar(self):
+        if self.debug:
+            DebugToolbarExtension(self):
+
 
     def init_loggers(self,
                      file_config=None,
